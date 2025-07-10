@@ -1,0 +1,100 @@
+Krenek: Primal Groundon, Mega Aggron, Salamence, Armaldo, Seviper, Deoxys (Speed form)
+Me: Swampert, Greninja, Palafin, Kyogre, Volcanion, Gollisopod
+Shawn: Dragapult, Chandelure, Cereludge, Gholdengo, Spiritomb, Mimikyu
+Marc: Drifblim, Flamigo, Yanmega, Corviknight, Skamory, Rayquaza
+	
+std::array<int, 6> palkia_base = {90, 120, 100, 150, 120, 100};
+    std::array<int, 6> palkia_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> palkia_ev = {0, 0, 0, 252, 0, 0};
+    Pokemon palkia = Pokemon("Palkia", 100, palkia_base, palkia_iv, palkia_ev, Nature::QUIRKY);
+    palkia.set_types(Type::WATER, Type::DRAGON);
+    Move hydro_pump = Move("Hydro Pump", 110, 80, 5, 5, false, Type::WATER, 0, Category::SPECIAL);
+    palkia.set_move(hydro_pump, 0);
+
+    std::array<int, 6> octillery_base = {75, 105, 75, 105, 75, 45};
+    std::array<int, 6> octillery_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> octillery_ev = {0, 127, 0, 128, 0, 0};
+    Pokemon octillery = Pokemon("Octillery", 100, octillery_base, octillery_iv, octillery_ev, Nature::CAREFUL);
+    octillery.set_types(Type::WATER, Type::NONE);
+    Move waterfall = Move("Waterfall", 80, 100, 15, 15, true, Type::WATER, 0, Category::PHYSICAL);
+    octillery.set_move(waterfall, 0);
+
+    std::array<int, 6> revavroom_base = {80, 119, 90, 54, 67, 90};
+    std::array<int, 6> revavroom_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> revavroom_ev = {0, 128, 0, 0, 0, 127};
+    Pokemon revavroom = Pokemon("Revavroom", 100, revavroom_base, revavroom_iv, revavroom_ev, Nature::RELAXED);
+    revavroom.set_types(Type::STEEL, Type::POISON);
+    Move iron_head = Move("Iron Head", 80, 100, 15, 15, true, Type::STEEL, 0, Category::PHYSICAL);
+    revavroom.set_move(iron_head, 0);
+
+    std::array<int, 6> magnezone_base = {70, 70, 115, 130, 90, 60};
+    std::array<int, 6> magnezone_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> magnezone_ev = {0, 0, 0, 252, 0, 0};
+    Pokemon magnezone = Pokemon("Magnezone", 100, magnezone_base, magnezone_iv, magnezone_ev, Nature::LONELY);
+    magnezone.set_types(Type::WATER, Type::DRAGON);
+    Move discharge = Move("Discharge", 80, 100, 15, 15, false, Type::ELECTRIC, 0, Category::SPECIAL);
+    magnezone.set_move(discharge, 0);
+
+    std::array<int, 6> meloetta_base = {100, 77, 77, 128, 128, 90};
+    std::array<int, 6> meloetta_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> meloetta_ev = {0, 0, 0, 127, 128, 0};
+    Pokemon meloetta = Pokemon("Meloetta", 100, meloetta_base, meloetta_iv, meloetta_ev, Nature::SASSY);
+    meloetta.set_types(Type::NORMAL, Type::PSYCHIC);
+    Move hyper_voice = Move("Hyper Voice", 90, 100, 10, 10, false, Type::NORMAL, 0, Category::SPECIAL);
+    meloetta.set_move(hyper_voice, 0);
+
+    std::array<int, 6> pyroar_base = {86, 68, 72, 109, 66, 106};
+    std::array<int, 6> pyroar_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> pyroar_ev = {0, 0, 0, 127, 0, 128};
+    Pokemon pyroar = Pokemon("Pyroar", 100, pyroar_base, pyroar_iv, pyroar_ev, Nature::RASH);
+    pyroar.set_types(Type::FIRE, Type::NORMAL);
+    Move incinerate = Move("Incinerate", 60, 100, 15, 15, false, Type::FIRE, 0, Category::SPECIAL);
+    pyroar.set_move(incinerate, 0);
+
+    std::array<int, 6> cinderace_base = {80, 116, 75, 65, 75, 119};
+    std::array<int, 6> cinderace_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> cinderace_ev = {0, 127, 0, 0, 0, 128};
+    Pokemon cinderace = Pokemon("Cinderace", 100, cinderace_base, cinderace_iv, cinderace_ev, Nature::MILD);
+    cinderace.set_types(Type::FIRE, Type::NONE);
+    Move pyro_ball = Move("Pyro Ball", 120, 90, 5, 5, false, Type::FIRE, 0, Category::PHYSICAL);
+    cinderace.set_move(pyro_ball, 0);
+
+    std::array<int, 6> solrock_base = {90, 95, 85, 55, 65, 70};
+    std::array<int, 6> solrock_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> solrock_ev = {55, 200, 0, 0, 0, 0};
+    Pokemon solrock = Pokemon("Solrock", 100, solrock_base, solrock_iv, solrock_ev, Nature::CAREFUL);
+    solrock.set_types(Type::ROCK, Type::PSYCHIC);
+    Move zen_headbutt = Move("Zen Headabutt", 80, 90, 15, 15, true, Type::PSYCHIC, 0, Category::PHYSICAL);
+    solrock.set_move(zen_headbutt, 0);
+
+    std::array<int, 6> zangoose_base = {73, 115, 60, 60, 60, 90};
+    std::array<int, 6> zangoose_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> zangoose_ev = {0, 200, 0, 0, 0, 55};
+    Pokemon zangoose = Pokemon("Zangoose", 100, zangoose_base, zangoose_iv, zangoose_ev, Nature::QUIRKY);
+    zangoose.set_types(Type::NORMAL, Type::NONE);
+    Move x_scissor = Move("X-Scissor", 80, 100, 15, 15, false, Type::BUG, 0, Category::PHYSICAL);
+    zangoose.set_move(x_scissor, 0);
+
+    std::array<int, 6> huntail_base = {55, 104, 105, 94, 75, 52};
+    std::array<int, 6> huntail_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> huntail_ev = {0, 254, 0, 0, 0, 1};
+    Pokemon huntail = Pokemon("Huntail", 100, huntail_base, huntail_iv, huntail_ev, Nature::QUIET);
+    huntail.set_types(Type::WATER, Type::NONE);
+    Move rock_tomb = Move("Rock Tomb", 60, 95, 15, 15, false, Type::ROCK, 0, Category::PHYSICAL);
+    huntail.set_move(rock_tomb, 0);
+
+    std::array<int, 6> raikou_base = {90, 85, 75, 115, 100, 115};
+    std::array<int, 6> raikou_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> raikou_ev = {0, 0, 0, 252, 0, 0};
+    Pokemon raikou = Pokemon("Raikou", 100, raikou_base, raikou_iv, raikou_ev, Nature::GENTLE);
+    raikou.set_types(Type::ELECTRIC, Type::NONE);
+    Move zap_cannon = Move("Zap Cannon", 120, 50, 5, 5, false, Type::ELECTRIC, 0, Category::SPECIAL);
+    raikou.set_move(zap_cannon, 0);
+
+    std::array<int, 6> cloyster_base = {50, 95, 180, 85, 45, 70};
+    std::array<int, 6> cloyster_iv = {31, 31, 31, 31, 31, 31};
+    std::array<int, 6> cloyster_ev = {0, 0, 252, 0, 0, 0};
+    Pokemon cloyster = Pokemon("Cloyster", 100, cloyster_base, cloyster_iv, cloyster_ev, Nature::DOCILE);
+    cloyster.set_types(Type::WATER, Type::ICE);
+    Move razor_shell = Move("Razor Shell", 75, 95, 10, 10, false, Type::WATER, 0, Category::PHYSICAL);
+    cloyster.set_move(razor_shell, 0);

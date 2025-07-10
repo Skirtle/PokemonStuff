@@ -1,0 +1,42 @@
+PRIMAL GROUDON
+TYPE- Ground, Fire
+EV- 140 s.def, 140 def, 140 speed, 90 atk
+MOVES- Eruption, Dragon Claw, Thunderbolt, Scary Face
+NATURE- Brave
+ABILITIES- Desolate Land
+
+MEGA AGGRON
+TYPE- Steel
+EV- atk 120, speed 140, s.def 140, s.atk 110
+MOVES- Heavy Slam, Metal Claw, Iron Defense, Reversal
+NATURE-  Jolly
+ABILITIES- Filter
+
+SEVIP
+ER
+TYPE- Poison
+EV- Speed 130, s.atk 140 atk 130, hp 100, def 10
+MOVES- poison tail, poison fang, lick, night slash
+NATURE- timid
+ABILITIES- shed skin
+
+SALAMENCE
+TYPE- dragon, flying
+EV- health 80, defense 140 atk 140, speed 140
+MOVES- dragon claw, flamethrower, zen headbutt, twister
+NATURE-  jolly
+ABILITIES- intimidate
+
+ARMALDO
+TYPE- rock, bug
+EV- atk 140, s.def 120, def 140, speed 110
+MOVES-  x-scissor, rock blast, aqua jet, rapid spin
+NATURE-  jolly
+ABILITIES- battle armor
+
+DEOXYS (SPEED FORM)
+TYPE- PSYCHIC
+EV- 4 hp, 252 atk, 252 speed
+MOVES-  extreme speed, stealth rock, spikes, taunt
+NATURE-  jolly
+ABILITIES- pressure 

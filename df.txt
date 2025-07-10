@@ -1,0 +1,32 @@
+Me: Swampert, Greninja, Palafin, Kyogre, Volcanion, Golisopod
+
+Swampert (F) @ Leftovers  
+Ability: Torrent  
+Tera Type: Water  
+EVs: 252 Atk / 168 Def / 90 Spe  
+Brave Nature  
+- Waterfall  
+- Flip Turn  
+- Earthquake  
+- Ice Punch  
+
+Greninja (F) @ Expert Belt  
+Ability: Protean  
+Tera Type: Water  
+EVs: 252 SpA / 4 SpD / 252 Spe  
+Timid Nature  
+- Sludge Wave  
+- Ice Beam  
+- Hydro Pump  
+- Mud Shot  
+
+Palafin @ Focus Sash  
+Ability: Zero to Hero  
+Tera Type: Water  
+EVs: 252 Atk / 4 SpD / 252 Spe  
+Jolly Nature  
+- Liquidation  
+- Drain Punch  
+- Bulk Up  
+- Flip Turn  
+
