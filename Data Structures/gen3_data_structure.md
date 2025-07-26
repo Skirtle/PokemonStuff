@@ -43,12 +43,12 @@
 
 ## Substructure order
 Order of the substructures is dependent on the personality value of the Pokemon, mod 24
-00. GAEM	06. AGEM	12. EGAM	18. MGAE
-01. GAME	07. AGME	13. EGMA	19. MGEA
-02. GEAM	08. AEGM	14. EAGM	20. MAGE
-03. GEMA	09. AEMG	15. EAMG	21. MAEG
-04. GMAE	10. AMGE	16. EMGA	22. MEGA
-05. GMEA	11. AMEG	17. EMAG	23. MEAG
+01. GAEM	06. AGEM	12. EGAM	18. MGAE
+02. GAME	07. AGME	13. EGMA	19. MGEA
+03. GEAM	08. AEGM	14. EAGM	20. MAGE
+04. GEMA	09. AEMG	15. EAMG	21. MAEG
+05. GMAE	10. AMGE	16. EMGA	22. MEGA
+06. GMEA	11. AMEG	17. EMAG	23. MEAG
 
 # Encyrption
 Decrypting the data involves 2 steps, decrypting it and then validating it
