@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class Token:
-    TOKEN_WORDS = ["t", "type", "n", "name", "gen", "game"] # to be expanded on
+    TOKEN_WORDS = ["t", "type", "n", "name", "gen", "game", "hp", "atk", "attack", "spatk", "specialattack", "defense", "def", "spdef", "specialdef", "speed", "spd", "bst", "total", "region"] # to be expanded on
     BOOL_WORDS = ["not", "and", "or"]
 
 class InvalidKeywordException(Exception):
@@ -65,6 +65,14 @@ def classify_tokens(tokens: list) -> list:
             elif (token_type in ["name", "n"]): token_type = "name"
             elif (token_type in ["gen", "generation"]): token_type = "generation"
             elif (token_type in ["game"]): token_type = "game"
+            elif (token_type in ["hp"]): token_type = "hp"
+            elif (token_type in ["atk", "attack"]): token_type = "atk"
+            elif (token_type in ["spatk", "specialattack"]): token_type = "spatk"
+            elif (token_type in ["def", "defense"]): token_type = "def"
+            elif (token_type in ["spdef", "specialattack"]): token_type = "spdef"
+            elif (token_type in ["spd", "speed"]): token_type = "spd"
+            elif (token_type in ["bst", "total"]): token_type = "bst"
+            elif (token_type in ["region"]): token_type = "region"
             
             token_tuple = (token_type, split_token[1])
             
@@ -99,6 +107,28 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str]) -> list:
             if (token_value in pokemon.generation): new_database.append(pokemon)
         elif (token_type == "game"):
             if (token_value in pokemon.game): new_database.append(pokemon)
+        elif (token_type == "region"):
+            if (token_value in pokemon.region.lower()): new_database.append(pokemon)
+        elif (token_type == "game"):
+            if (token_value == pokemon.stats[0]): new_database.append(pokemon)
+        elif (token_type == "atk"):
+            token_value = int(token_value)
+            if (token_value == pokemon.stats[1]): new_database.append(pokemon)
+        elif (token_type == "spatk"):
+            token_value = int(token_value)
+            if (token_value == pokemon.stats[2]): new_database.append(pokemon)
+        elif (token_type == "def"):
+            token_value = int(token_value)
+            if (token_value == pokemon.stats[3]): new_database.append(pokemon)
+        elif (token_type == "spdef"):
+            token_value = int(token_value)
+            if (token_value == pokemon.stats[4]): new_database.append(pokemon)
+        elif (token_type == "spd"):
+            token_value = int(token_value)
+            if (token_value == pokemon.stats[5]): new_database.append(pokemon)
+        elif (token_type == "bst"):
+            token_value = int(token_value)
+            if (token_value == pokemon.base_total): new_database.append(pokemon)
     
     
     return new_database

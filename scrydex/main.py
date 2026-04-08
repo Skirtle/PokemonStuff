@@ -1,16 +1,27 @@
 import parser
 from pokemon import Pokemon
+import csv
 
 if __name__ == "__main__":
-    houndour = Pokemon("Houndour", ["dark", "fire"])
-    houndoom = Pokemon("Houndoom", ["dark", "fire"])
-    mega_houndoom = Pokemon("Mega Houndoom", ["dark", "fire"])
-    chiyu = Pokemon("Chi-Yu", ["dark", "fire"])
-    incineroar = Pokemon("Incinerorar", ["fire", "dark"])
-    charmander = Pokemon("Charmander", ["fire"])
-    absol = Pokemon("absol", ["dark"])
-    houndstone = Pokemon("Houndstone", ["ghost"])
-    pokemon_database = [houndour, houndoom, mega_houndoom, chiyu, incineroar, charmander, absol, houndstone]
+    pokemon_database = []
+    with open(f"pokemon.csv", "r") as file:
+        reader = csv.reader(file)
+        for pokemon in reader:
+            if (pokemon[0] == "number"): continue
+            number = int(pokemon[0])
+            name = pokemon[2]
+            type_1 = pokemon[3]
+            type_2 = pokemon[4]
+            stats = pokemon[6:12]
+            gen = int(pokemon[12])
+            region = pokemon[13]
+            
+            types = [type_1.lower()]
+            if (type_2 != 'None'): types.append(type_2.lower())
+            stats_int = [int(stat) for stat in stats]
+            
+            pokemon = Pokemon(name, number, region, types, [gen], [], stats_int)
+            pokemon_database.append(pokemon)
     
     
     while (query:=input("Query: ").strip()):
