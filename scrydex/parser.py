@@ -173,7 +173,7 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
             if (token_value in pokemon.generation): new_database.append(pokemon)
         
         elif (token_type == "game"):
-            if (token_value in pokemon.game): new_database.append(pokemon)
+            if (token_value in pokemon.games): new_database.append(pokemon)
         
         elif (token_type == "region"):
             if (token_value in pokemon.region.lower()): new_database.append(pokemon)

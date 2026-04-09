@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>Pokemon Search</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                background: #0f172a;
+                color: white;
+                padding: 20px;
+            }
+            input {
+                width: 50%;
+                padding: 12px;
+                font-size: 16px;
+                margin-bottom: 20px;
+                border-radius: 8px;
+                border: none;
+            }
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 12px;
+            }
+            .card {
+                background: #1e293b;
+                border-radius: 12px;
+                padding: 10px;
+                text-align: center;
+                transition: transform 0.15s ease;
+            }
+            .card:hover {
+                transform: scale(1.05);
+            }
+            img {
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Scrydex</h1>
+        <input id="search" placeholder="type:ghost speed>100" />
+        <div id="count"></div>
+        <div class="grid" id="results"></div>
+
+        <script>
+            const input = document.getElementById("search");
+            const results = document.getElementById("results");
+            const count = document.getElementById("count");
+
+            let timeout;
+
+            input.addEventListener("input", () => {
+                clearTimeout(timeout);
+                timeout = setTimeout(runSearch, 200);
+            });
+
+            async function runSearch() {
+                const q = input.value;
+
+                const res = await fetch(`/search?query=${encodeURIComponent(q)}`);
+                const data = await res.json();
+
+                results.innerHTML = "";
+                count.innerText = `Found ${data.count} results`;
+
+                data.results.forEach(p => {
+                    const div = document.createElement("div");
+                    div.className = "card";
+
+                    const img = document.createElement("img");
+                    img.src = p.image;
+                    img.loading = "lazy";
+
+                    const name = document.createElement("div");
+                    name.innerText = p.name;
+
+                    div.appendChild(img);
+                    div.appendChild(name);
+                    results.appendChild(div);
+                });
+            }
+        </script>
+    </body>
+    </html>

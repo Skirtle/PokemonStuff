@@ -9,16 +9,30 @@ class Pokemon:
     region: str
     types: list[str] = field(default_factory = list)
     generation: list[int] = field(default_factory = list)
-    game: list[str] = field(default_factory = list)
+    games: list[str] = field(default_factory = list)
     stats: list[int] = field(default_factory = list)
     
     def __post_init__(self) -> None:
         self.normalized_name = self.name.replace(" ", "").strip().lower()
-        self.initial_game = self.game[0] if len(self.game) > 0 else None
+        self.initial_game = self.games[0] if len(self.games) > 0 else None
         self.base_total = sum(self.stats)
     
     def __str__(self) -> str: return self.name
     def __repr__(self) -> str: return self.name
+    
+    def serialized(self) -> dict:
+        return {
+            "name": self.name,
+            "dex_number": self.dex_number,
+            "region": self.region,
+            "types": self.types,
+            "xx": self.generation,
+            "xx": self.games,
+            "stats": self.stats,
+            "normalized_name": self.normalized_name,
+            "initial_game": self.initial_game,
+            "base_total": self.base_total
+    }
     
     
 def create_database_from_csv(filename: str = "pokemon.csv") -> list[Pokemon]:
