@@ -28,7 +28,7 @@ if __name__ == "__main__":
         query_tokens = parser.tokenize(query)
         classfied_tokens = parser.classify_tokens(query_tokens)
         
-        print(query)    
+        print(query, classfied_tokens)
         valid_pokemon = pokemon_database[:]
         
         for token in classfied_tokens:

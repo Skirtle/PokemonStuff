@@ -49,10 +49,16 @@ def classify_tokens(tokens: list) -> list:
     """
     classified_tokens = []
     for token in tokens:
-        split_token = token.split(":")
+        if ("<=" in token): comp_type = "<="
+        elif ("<" in token): comp_type = "<"
+        elif (">=" in token): comp_type = ">="
+        elif (">" in token): comp_type = ">"
+        elif ("=" in token): comp_type = "=="
+        else: comp_type = ":"
+        split_token = token.split(comp_type)
         
         if (len(split_token) == 1): # Could be a bool token, or a name
-            if (token not in Token.BOOL_WORDS): classified_tokens.append(("name", token)) # Name token
+            if (token not in Token.BOOL_WORDS): classified_tokens.append(("name", token, "==")) # Name token
             else: classified_tokens.append(("bool", token)) # Bool token
         
         
@@ -74,7 +80,8 @@ def classify_tokens(tokens: list) -> list:
             elif (token_type in ["bst", "total"]): token_type = "bst"
             elif (token_type in ["region"]): token_type = "region"
             
-            token_tuple = (token_type, split_token[1])
+            if (comp_type == ":"): comp_type = "=="
+            token_tuple = (token_type, split_token[1], comp_type)
             
             classified_tokens.append(token_tuple)
             
@@ -84,7 +91,7 @@ def classify_tokens(tokens: list) -> list:
         
     return classified_tokens
 
-def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str]) -> list:
+def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> list:
     """Given a list of Pokemon, return a new list of the Pokemon that satisfy the token
 
     Args:
@@ -95,10 +102,10 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str]) -> list:
         list: a list of Pokemon
     """
     new_database = []
-    
     for pokemon in database:
         token_type = token[0]
         token_value = token[1]
+        compare_type = token[2]
         if (token_type == "name"): 
             if (token_value in pokemon.normalized_name): new_database.append(pokemon)
         elif (token_type == "type"):
@@ -114,7 +121,8 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str]) -> list:
             if (token_value == pokemon.stats[0]): new_database.append(pokemon)
         elif (token_type == "atk"):
             token_value = int(token_value)
-            if (token_value == pokemon.stats[1]): new_database.append(pokemon)
+            eval_exp = f"{token_value} {compare_type} {pokemon.stats[1]}"
+            if (eval(eval_exp)): new_database.append(pokemon)
         elif (token_type == "spatk"):
             token_value = int(token_value)
             if (token_value == pokemon.stats[2]): new_database.append(pokemon)
