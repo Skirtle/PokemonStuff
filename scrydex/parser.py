@@ -12,6 +12,12 @@ class InvalidKeywordException(Exception):
         super().__init__(self.message)
     def __str__(self): return self.message
 
+class EmptyQueryException(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+    def __str__(self): return self.message
+
 def strip(s: str) -> str:
     """strips a string, as well as leading and ending quotes
 
@@ -61,8 +67,28 @@ def tokenize(query: str) -> list:
     tokens.append(curr_token)
     return tokens
 
-def post_process_tokens(tokens: list[str]) -> list[str]:
-    return tokens
+def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
+    """Adds boolean tokens in between tokens where they belong
+
+    Args:
+        tokens (list[tuple]): a list of tokens
+
+    Returns:
+        list[tuple]: a list of tokens
+    """
+    if (len(tokens) == 0): raise EmptyQueryException(f"Query cannot be empty")
+
+    index = 1
+    new_tokens = [tokens[0]]
+    while (index < len(tokens)):
+
+        if (tokens[index - 1][0] != "bool" and tokens[index][0] != "bool"):
+            new_tokens.append(("bool", "and"))
+        new_tokens.append(tokens[index])
+        index += 1
+
+
+    return new_tokens
 
 def classify_tokens(tokens: list) -> list:
     """Returns a list of the tokens in a query, classified by their query type
@@ -117,7 +143,7 @@ def classify_tokens(tokens: list) -> list:
             
         else: raise Exception(f"split too many times, {split_token}") # Error
 
-    return classified_tokens
+    return post_process_tokens(classified_tokens)
 
 def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> list:
     """Given a list of Pokemon, return a new list of the Pokemon that satisfy the token
