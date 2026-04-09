@@ -1,26 +1,36 @@
 <html>
     <head>
-        <title>Pokemon Search</title>
+        <title>Scrydex</title>
         <style>
             body {
                 font-family: sans-serif;
                 background: #0f172a;
                 color: white;
                 padding: 20px;
+                text-align: center; /* centers header + inline elements */
             }
+
+            h1 {
+                text-align: center;
+            }
+
             input {
                 width: 50%;
                 padding: 12px;
                 font-size: 16px;
-                margin-bottom: 20px;
+                margin: 0 auto 20px auto; /* centers input horizontally */
                 border-radius: 8px;
                 border: none;
+                display: block; /* required for margin auto to work */
             }
+
             .grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(180px, 180px));
+                justify-content: center; /* centers the whole grid */
                 gap: 12px;
             }
+
             .card {
                 background: #1e293b;
                 border-radius: 12px;
@@ -28,11 +38,15 @@
                 text-align: center;
                 transition: transform 0.15s ease;
             }
+
             .card:hover {
                 transform: scale(1.05);
             }
+
             img {
                 width: 100%;
+                display: block;
+                margin: 0 auto; /* ensures images are centered inside card */
             }
         </style>
     </head>

@@ -26,12 +26,13 @@ class Pokemon:
             "dex_number": self.dex_number,
             "region": self.region,
             "types": self.types,
-            "xx": self.generation,
-            "xx": self.games,
+            "generation": self.generation,
+            "games": self.games,
             "stats": self.stats,
             "normalized_name": self.normalized_name,
             "initial_game": self.initial_game,
-            "base_total": self.base_total
+            "base_total": self.base_total,
+            "image": f"/images/{self.dex_number}.png"
     }
     
     
