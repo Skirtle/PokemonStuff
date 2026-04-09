@@ -215,7 +215,6 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
     
     return new_database
 
-
 if __name__ == "__main__":
     queries = ["name=\"type: null\"", "name:\"type: null\"", "name=\"ghastly\"", "name:\"ghastly\"", "name:ghastly", "name=ghastly"]
     for query in queries:
