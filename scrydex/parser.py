@@ -1,10 +1,7 @@
 from pokemon import Pokemon
-from dataclasses import dataclass, field
 
-@dataclass
-class Token:
-    TOKEN_WORDS = ["t", "type", "n", "name", "gen", "game", "hp", "atk", "attack", "spatk", "specialattack", "defense", "def", "spdef", "specialdef", "speed", "spd", "bst", "total", "region"] # to be expanded on
-    BOOL_WORDS = ["not", "and", "or"]
+TOKEN_WORDS = ["t", "type", "n", "name", "gen", "game", "hp", "atk", "attack", "spatk", "specialattack", "defense", "def", "spdef", "specialdef", "speed", "spd", "bst", "total", "region"] # to be expanded on
+BOOL_WORDS = ["not", "and", "or"]
 
 class InvalidKeywordException(Exception):
     def __init__(self, message):
@@ -112,13 +109,13 @@ def classify_tokens(tokens: list) -> list:
         
         # Either a bool word or name
         if (len(split_token) == 1): # Could be a bool token, or a name
-            if (token not in Token.BOOL_WORDS): classified_tokens.append(("name", token, "==")) # Name token
+            if (token not in BOOL_WORDS): classified_tokens.append(("name", token, "==")) # Name token
             else: classified_tokens.append(("bool", token)) # Bool token
         
         # Some type of attribute to query
         elif (len(split_token) == 2): # Attribute token
             # Error checking
-            if (split_token[0] not in Token.TOKEN_WORDS): raise InvalidKeywordException(f"{split_token[0]} not a valid keyword")
+            if (split_token[0] not in TOKEN_WORDS): raise InvalidKeywordException(f"{split_token[0]} not a valid keyword")
             
             token_type = split_token[0]
             token_value = strip(split_token[1])
@@ -209,7 +206,6 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
         elif (token_type == "bst"):
             token_value = int(token_value)
             if (token_value == pokemon.base_total): new_database.append(pokemon)
-    
     
     return new_database
 
