@@ -210,12 +210,13 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
     return new_database
 
 if __name__ == "__main__":
-    queries = ["name=\"type: null\"", "name:\"type: null\"", "name=\"ghastly\"", "name:\"ghastly\"", "name:ghastly", "name=ghastly"]
+    queries = ["t:ghost spd>80 or spatk<=45"]
     for query in queries:
         try:
             raw_tokens = tokenize(query)
-            process_tokens = post_process_tokens(raw_tokens)
-            classified_tokens = classify_tokens(process_tokens)
-            print(f"{query = }\n\t{raw_tokens}\n\t{process_tokens}\n\t{classified_tokens}")
+            classified_tokens = classify_tokens(raw_tokens)
+            print(f"{query = }")
+            for cl_token in classified_tokens:
+                print(f"\t{cl_token}")
         except Exception as e:
             print(f"Error on {query = }:\n\t{type(e).__name__}, {e}")
