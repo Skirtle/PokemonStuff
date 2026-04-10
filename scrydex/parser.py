@@ -137,11 +137,9 @@ def classify_tokens(tokens: list) -> list:
             elif (token_type in ["region"]): token_type = "region"
             
             if (comp_type == ":" or comp_type == "="): comp_type = "=="
-            token_tuple = (token_type, token_value, comp_type)
+            token_tuple = (token_type, token_value, comp_type) # ex: ("hp", "50", "<=")
             
             classified_tokens.append(token_tuple)
-            
-        else: raise Exception(f"split too many times, {split_token}") # Error
 
     return post_process_tokens(classified_tokens)
 
