@@ -34,7 +34,7 @@ def strip(s: str) -> str:
         s = s[1:]
     if (s and s[-1] in ("'", '"')):  # check s again
         s = s[:-1]
-    return s.strip()
+    return s
 
 def tokenize(query: str) -> list:
     """turns a search query into individual tokens in a list
