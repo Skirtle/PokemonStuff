@@ -196,7 +196,7 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
     Returns:
         list: a list of Pokemon
     """
-    new_database = []
+    new_database: list[Pokemon] = []
     for pokemon in database:
         token_type = token[0]
         token_value = token[1]
