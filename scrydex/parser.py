@@ -183,12 +183,12 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
             eval_exp = f"{pokemon.stats[1]} {compare_type} {token_value}"
             if (eval(eval_exp)): new_database.append(pokemon)
         
-        elif (token_type == "spatk"):
+        elif (token_type == "def"):
             token_value = int(token_value)
             eval_exp = f"{pokemon.stats[2]} {compare_type} {token_value}"
             if (eval(eval_exp)): new_database.append(pokemon)
-
-        elif (token_type == "def"):
+        
+        elif (token_type == "spatk"):
             token_value = int(token_value)
             eval_exp = f"{pokemon.stats[3]} {compare_type} {token_value}"
             if (eval(eval_exp)): new_database.append(pokemon)
