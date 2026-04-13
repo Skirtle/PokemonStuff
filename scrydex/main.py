@@ -9,7 +9,7 @@ app = FastAPI()
 ALL_POKEMON = create_database_from_csv()
 MAX_RESULTS = 100
 
-app.mount("/images", StaticFiles(directory="./sprites-master/sprites/pokemon/other/official-artwork"), name="images")
+app.mount("/images", StaticFiles(directory = "./sprites-master/sprites/pokemon/other/official-artwork"), name = "images")
 
 @app.get("/search")
 async def search(query: str = ""):
@@ -20,7 +20,7 @@ async def search(query: str = ""):
         "results": [p.serialized() for p in valid_pokemon]
     }
     
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class = HTMLResponse)
 async def homepage() -> str:
     s = ""
     with open("homepage.html", "r") as file:

@@ -3,6 +3,17 @@ from pokemon import Pokemon
 TOKEN_WORDS = ["t", "type", "n", "name", "gen", "game", "hp", "atk", "attack", "spatk", "specialattack", "defense", "def", "spdef", "specialdef", "speed", "spd", "bst", "total", "region"] # to be expanded on
 BOOL_WORDS = ["not", "and", "or"]
 
+NEGATED_BOOLS = {
+    "<=": ">",
+    "<": ">=",
+    ">=": "<",
+    ">": "<=",
+    "=": "!=",
+    "==": "!=",
+    ":": "!=",
+    "!=": "==",
+}
+
 class InvalidKeywordException(Exception):
     def __init__(self, message):
         self.message = message
@@ -48,14 +59,27 @@ def tokenize(query: str) -> list:
     in_quotes = False
     
     index = 0
+    print(f"{query = }")
     while (index < len(query)):
         char = query[index]
 
         if (char in "\"'"): in_quotes = not in_quotes
 
-        if char == " " and not in_quotes:
+        if (char == " " and not in_quotes):
             tokens.append(curr_token)
             curr_token = ""
+            
+        elif ((char == "(" or char == ")") and not in_quotes):
+            if (curr_token): # parenthesis and curr_token is not empty (i.e. the ) in '(atk>45)')
+                tokens.append(curr_token)
+                print(f"\tAdding {char}, with curr_token = '{curr_token}'. '{curr_token}' added to tokens")
+                tokens.append(char)
+                curr_token = ""
+                
+            else: # parenthesis and curr_token is empty (i.e. the ( in '(atk>45)')
+                print(f"\tAdding {char}, with {curr_token = }.")
+                tokens.append(char)
+        
         else:
             curr_token += char
         
@@ -63,29 +87,6 @@ def tokenize(query: str) -> list:
 
     tokens.append(curr_token)
     return tokens
-
-def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
-    """Adds boolean tokens in between tokens where they belong
-
-    Args:
-        tokens (list[tuple]): a list of tokens
-
-    Returns:
-        list[tuple]: a list of tokens
-    """
-    if (len(tokens) == 0): raise EmptyQueryException(f"Query cannot be empty")
-
-    index = 1
-    new_tokens = [tokens[0]]
-    while (index < len(tokens)):
-
-        if (tokens[index - 1][0] != "bool" and tokens[index][0] != "bool"):
-            new_tokens.append(("bool", "and"))
-        new_tokens.append(tokens[index])
-        index += 1
-
-
-    return new_tokens
 
 def classify_tokens(tokens: list) -> list:
     """Returns a list of the tokens in a query, classified by their query type
@@ -96,8 +97,20 @@ def classify_tokens(tokens: list) -> list:
     Returns:
         list: a list of tuples of token and their classifications
     """
+    print(f"Tokens given to classify_tokens: {tokens}")
     classified_tokens = []
     for token in tokens:
+        # Empty token
+        if (token == ""): continue
+        
+        # Parenthesis
+        if (token == ")" or token == "("):
+            classified_tokens.append(("paren", token))
+            continue
+        
+        if (token[0] == "-"): negate_bool = True
+        else: negate_bool = False
+        
         # Get the type of token comparison
         if ("<=" in token): comp_type = "<="
         elif ("<" in token): comp_type = "<"
@@ -109,13 +122,19 @@ def classify_tokens(tokens: list) -> list:
         
         # Either a bool word or name
         if (len(split_token) == 1): # Could be a bool token, or a name
-            if (token not in BOOL_WORDS): classified_tokens.append(("name", token, "==")) # Name token
-            else: classified_tokens.append(("bool", token)) # Bool token
+            if (token not in BOOL_WORDS): 
+                if (negate_bool): bool_type = "!="
+                else: bool_type = "=="
+                classified_tokens.append(("name", token, bool_type)) # Name token
+            else: 
+                if (negate_bool): token = NEGATED_BOOLS[token]
+                classified_tokens.append(("bool", token)) # Bool token
         
         # Some type of attribute to query
         elif (len(split_token) == 2): # Attribute token
             # Error checking
-            if (split_token[0] not in TOKEN_WORDS): raise InvalidKeywordException(f"{split_token[0]} not a valid keyword")
+            if (negate_bool and split_token[0][1:] not in TOKEN_WORDS): raise InvalidKeywordException(f"{split_token[0][1:]} not a valid keyword")
+            elif (not negate_bool and split_token[0] not in TOKEN_WORDS): raise InvalidKeywordException(f"{split_token[0]} not a valid keyword")
             
             token_type = split_token[0]
             token_value = strip(split_token[1])
@@ -134,11 +153,39 @@ def classify_tokens(tokens: list) -> list:
             elif (token_type in ["region"]): token_type = "region"
             
             if (comp_type == ":" or comp_type == "="): comp_type = "=="
+            if (negate_bool): 
+                comp_type = NEGATED_BOOLS[comp_type]
+                token_type = token_type[1:]
             token_tuple = (token_type, token_value, comp_type) # ex: ("hp", "50", "<=")
             
             classified_tokens.append(token_tuple)
 
     return post_process_tokens(classified_tokens)
+
+def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
+    """Adds boolean tokens in between tokens where they belong
+
+    Args:
+        tokens (list[tuple]): a list of tokens
+
+    Returns:
+        list[tuple]: a list of tokens
+    """
+    if (len(tokens) == 0): raise EmptyQueryException(f"Query cannot be empty")
+
+    index = 1
+    new_tokens = [tokens[0]]
+    while (index < len(tokens)):
+        if (tokens[index - 1][0] not in ["bool", "paren"] and tokens[index][0] not in ["bool", "paren"]):
+            new_tokens.append(("bool", "and"))
+            
+        elif (tokens[index - 1][1] == ")" and tokens[index][1] != ")" and tokens[index][0] != "bool"):
+            new_tokens.append(("bool", "and"))
+        
+        new_tokens.append(tokens[index])
+        index += 1
+
+    return new_tokens
 
 def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> list:
     """Given a list of Pokemon, return a new list of the Pokemon that satisfy the token
@@ -210,12 +257,15 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
     return new_database
 
 if __name__ == "__main__":
-    queries = ["t:ghost spd>80 or spatk<=45"]
+    queries = ["((t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
     for query in queries:
         try:
             raw_tokens = tokenize(query)
             classified_tokens = classify_tokens(raw_tokens)
             print(f"{query = }")
+            for raw_token in raw_tokens:
+                print(raw_token, end = " ")
+            print()
             for cl_token in classified_tokens:
                 print(f"\t{cl_token}")
         except Exception as e:
