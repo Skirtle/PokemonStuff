@@ -9,7 +9,7 @@ def get_pokemon_from_query(database: list[Pokemon], query: str) -> list[Pokemon]
     print(classified_tokens)
     
     for token in classified_tokens:
-        if (token[0] == "bool"): continue
+        if (token[0] == "bool" or token[0] == "paren"): continue
         valid_pokemon = parser.get_valid_pokemon(valid_pokemon, token)
         if (len(valid_pokemon) == 0): break
     

@@ -137,6 +137,7 @@ def classify_tokens(tokens: list) -> list:
             elif (not negate_bool and split_token[0] not in TOKEN_WORDS): raise InvalidKeywordException(f"{split_token[0]} not a valid keyword")
             
             token_type = split_token[0]
+            if (negate_bool): token_type = token_type[1:]
             token_value = strip(split_token[1])
 
             if (token_type in ["type", "t"]): token_type = "type"
@@ -153,9 +154,7 @@ def classify_tokens(tokens: list) -> list:
             elif (token_type in ["region"]): token_type = "region"
             
             if (comp_type == ":" or comp_type == "="): comp_type = "=="
-            if (negate_bool): 
-                comp_type = NEGATED_BOOLS[comp_type]
-                token_type = token_type[1:]
+            if (negate_bool): comp_type = NEGATED_BOOLS[comp_type]
             token_tuple = (token_type, token_value, comp_type) # ex: ("hp", "50", "<=")
             
             classified_tokens.append(token_tuple)
@@ -205,20 +204,24 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
 
         if (token_type == "name"):
             token_value = token_value.replace(" ", "")
-            if (token_value in pokemon.normalized_name): new_database.append(pokemon)
+            if (compare_type == "!=" and token_value not in pokemon.normalized_name): new_database.append(pokemon)
+            elif (token_value in pokemon.normalized_name): new_database.append(pokemon)
         
         elif (token_type == "type"):
-            if (token_value in pokemon.types): new_database.append(pokemon)
+            if (compare_type == "!=" and token_value not in pokemon.types): new_database.append(pokemon)
+            elif (compare_type == "==" and token_value in pokemon.types): new_database.append(pokemon)
         
         elif (token_type == "generation"):
             token_value = int(token_value)
             if (token_value in pokemon.generation): new_database.append(pokemon)
         
         elif (token_type == "game"):
-            if (token_value in pokemon.games): new_database.append(pokemon)
+            if (compare_type == "!=" and token_value not in pokemon.games): new_database.append(pokemon)
+            elif (token_value in pokemon.games): new_database.append(pokemon)
         
         elif (token_type == "region"):
-            if (token_value in pokemon.region.lower()): new_database.append(pokemon)
+            if (compare_type == "!=" and token_value not in pokemon.region.lower()): new_database.append(pokemon)
+            elif (token_value in pokemon.region.lower()): new_database.append(pokemon)
         
         elif (token_type == "hp"):
             token_value = int(token_value)
@@ -257,7 +260,8 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
     return new_database
 
 if __name__ == "__main__":
-    queries = ["((t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
+    #queries = ["((t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
+    queries = ["t:fire -t:ghost"]
     for query in queries:
         try:
             raw_tokens = tokenize(query)
