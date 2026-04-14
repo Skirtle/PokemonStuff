@@ -6,7 +6,6 @@ def get_pokemon_from_query(database: list[Pokemon], query: str) -> list[Pokemon]
     valid_pokemon = database[:]
     tokens = parser.tokenize(query)
     classified_tokens = parser.classify_tokens(tokens)
-    print(classified_tokens)
     
     for token in classified_tokens:
         if (token[0] == "bool" or token[0] == "paren"): continue

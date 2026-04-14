@@ -13,7 +13,8 @@ app.mount("/images", StaticFiles(directory = "./sprites-master/sprites/pokemon/o
 
 @app.get("/search")
 async def search(query: str = ""):
-    valid_pokemon = get_pokemon_from_query(ALL_POKEMON, query)
+    if (query == ""): valid_pokemon = ALL_POKEMON[:]
+    else: valid_pokemon = get_pokemon_from_query(ALL_POKEMON, query)
     
     return {
         "count": len(valid_pokemon),

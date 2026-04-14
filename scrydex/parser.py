@@ -59,7 +59,6 @@ def tokenize(query: str) -> list:
     in_quotes = False
     
     index = 0
-    print(f"{query = }")
     while (index < len(query)):
         char = query[index]
 
@@ -72,12 +71,10 @@ def tokenize(query: str) -> list:
         elif ((char == "(" or char == ")") and not in_quotes):
             if (curr_token): # parenthesis and curr_token is not empty (i.e. the ) in '(atk>45)')
                 tokens.append(curr_token)
-                print(f"\tAdding {char}, with curr_token = '{curr_token}'. '{curr_token}' added to tokens")
                 tokens.append(char)
                 curr_token = ""
                 
             else: # parenthesis and curr_token is empty (i.e. the ( in '(atk>45)')
-                print(f"\tAdding {char}, with {curr_token = }.")
                 tokens.append(char)
         
         else:
@@ -97,7 +94,6 @@ def classify_tokens(tokens: list) -> list:
     Returns:
         list: a list of tuples of token and their classifications
     """
-    print(f"Tokens given to classify_tokens: {tokens}")
     classified_tokens = []
     for token in tokens:
         # Empty token
