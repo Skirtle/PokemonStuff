@@ -52,12 +52,15 @@ def tokenize(query: str) -> list:
     while (index < len(query)):
         char = query[index]
 
+        # Quotes
         if (char in "\"'"): in_quotes = not in_quotes
 
+        # Spaces
         if (char == " " and not in_quotes):
             tokens.append(curr_token)
             curr_token = ""
-            
+        
+        # Parenthesis
         elif ((char == "(" or char == ")") and not in_quotes):
             if (curr_token): # parenthesis and curr_token is not empty (i.e. the ) in '(atk>45)')
                 tokens.append(curr_token)
@@ -67,13 +70,14 @@ def tokenize(query: str) -> list:
             else: # parenthesis and curr_token is empty (i.e. the ( in '(atk>45)')
                 tokens.append(char)
 
+        # NOT
         elif (char == "-" and not in_quotes):
-            if (curr_token): # parenthesis and curr_token is not empty (i.e. the ) in '(atk>45)')
+            if (curr_token):
                 tokens.append(curr_token)
                 tokens.append(char)
                 curr_token = ""
                 
-            else: # parenthesis and curr_token is empty (i.e. the ( in '(atk>45)')
+            else:
                 tokens.append(char)
 
         else:
@@ -99,12 +103,12 @@ def classify_tokens(tokens: list) -> list:
         if (token == ""): continue
         
         # Parenthesis
-        if (token == ")" or token == "("):
+        elif (token == ")" or token == "("):
             classified_tokens.append(("paren", token))
             continue
         
-        if (token[0] == "-"): 
-            classified_tokens.append(("bool", token))
+        elif (token[0] == "-"): 
+            classified_tokens.append(("bool", "not"))
             continue
         
         # Get the type of token comparison
@@ -167,6 +171,9 @@ def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
     new_tokens = [tokens[0]]
     while (index < len(tokens)):
         if (tokens[index - 1][0] not in ["bool", "paren"] and tokens[index][0] not in ["bool", "paren"]):
+            new_tokens.append(("bool", "and"))
+
+        elif (tokens[index - 1][0] not in ["bool", "paren"] and tokens[index][1] == "not"):
             new_tokens.append(("bool", "and"))
             
         elif (tokens[index - 1][1] == ")" and tokens[index][1] != ")" and tokens[index][0] != "bool"):
