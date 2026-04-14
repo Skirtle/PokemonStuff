@@ -1,15 +1,15 @@
 from dataclasses import dataclass
 from pokemon import Pokemon, create_database_from_csv
-import parser
+import lexer
 
 def get_pokemon_from_query(database: list[Pokemon], query: str) -> list[Pokemon]:
     valid_pokemon = database[:]
-    tokens = parser.tokenize(query)
-    classified_tokens = parser.classify_tokens(tokens)
+    tokens = lexer.tokenize(query)
+    classified_tokens = lexer.classify_tokens(tokens)
     
     for token in classified_tokens:
         if (token[0] == "bool" or token[0] == "paren"): continue
-        valid_pokemon = parser.get_valid_pokemon(valid_pokemon, token)
+        valid_pokemon = lexer.get_valid_pokemon(valid_pokemon, token)
         if (len(valid_pokemon) == 0): break
     
     

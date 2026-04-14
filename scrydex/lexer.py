@@ -257,7 +257,7 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
 
 if __name__ == "__main__":
     #queries = ["((t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
-    queries = ["t:fire -t:ghost"]
+    queries = ["t:fire -t:ghost -or"]
     for query in queries:
         try:
             raw_tokens = tokenize(query)
