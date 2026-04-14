@@ -177,7 +177,7 @@ def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
 
     return new_tokens
 
-def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str] | tuple[str, str, str]) -> list[Pokemon]:
+def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str], negate: bool = False) -> list[Pokemon]:
     new_database: list[Pokemon] = []
     for pokemon in database:
         token_type = token[0]
