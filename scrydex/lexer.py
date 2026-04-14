@@ -1,18 +1,8 @@
 from pokemon import Pokemon
+from typing import Optional
 
 TOKEN_WORDS = ["t", "type", "n", "name", "gen", "game", "hp", "atk", "attack", "spatk", "specialattack", "defense", "def", "spdef", "specialdef", "speed", "spd", "bst", "total", "region"] # to be expanded on
-BOOL_WORDS = ["not", "and", "or"]
-
-NEGATED_BOOLS = {
-    "<=": ">",
-    "<": ">=",
-    ">=": "<",
-    ">": "<=",
-    "=": "!=",
-    "==": "!=",
-    ":": "!=",
-    "!=": "==",
-}
+OPERATOR_WORDS = ["not", "and", "or"]
 
 class InvalidKeywordException(Exception):
     def __init__(self, message):
@@ -128,7 +118,7 @@ def classify_tokens(tokens: list) -> list:
         
         # Either a bool word or name
         if (len(split_token) == 1): # Could be a bool token, or a name
-            if (token not in BOOL_WORDS): 
+            if (token not in OPERATOR_WORDS): 
                 bool_type = "=="
                 classified_tokens.append(("name", token, bool_type)) # Name token
             else: 
@@ -187,16 +177,7 @@ def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
 
     return new_tokens
 
-def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> list:
-    """Given a list of Pokemon, return a new list of the Pokemon that satisfy the token
-
-    Args:
-        database (list[Pokemon]): a list of Pokemon
-        token (tuple[str, str]): the token
-
-    Returns:
-        list: a list of Pokemon
-    """
+def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str] | tuple[str, str, str]) -> list[Pokemon]:
     new_database: list[Pokemon] = []
     for pokemon in database:
         token_type = token[0]
@@ -262,7 +243,7 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
 
 if __name__ == "__main__":
     #queries = ["((t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
-    queries = ["t:fire -t:ghost", "(-(t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire" ]
+    queries = ["t:fire -mega", "t:fire -t:ghost", "(-(t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire" ]
     for query in queries:
         try:
             raw_tokens = tokenize(query)
@@ -271,7 +252,6 @@ if __name__ == "__main__":
             for raw_token in raw_tokens:
                 print(raw_token, end = " ")
             print()
-            for cl_token in classified_tokens:
-                print(f"\t{cl_token}")
+            for cl_token in classified_tokens: print(f"\t{cl_token}")
         except Exception as e:
             print(f"Error on {query = }:\n\t{type(e).__name__}, {e}")

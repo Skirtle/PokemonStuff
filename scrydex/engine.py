@@ -8,7 +8,10 @@ def get_pokemon_from_query(database: list[Pokemon], query: str) -> list[Pokemon]
     classified_tokens = lexer.classify_tokens(tokens)
     
     for token in classified_tokens:
-        if (token[0] == "bool" or token[0] == "paren"): continue
+        if (token[0] == "bool"):
+            continue
+        elif (token[0] == "paren"):
+            continue
         valid_pokemon = lexer.get_valid_pokemon(valid_pokemon, token)
         if (len(valid_pokemon) == 0): break
     
