@@ -76,7 +76,16 @@ def tokenize(query: str) -> list:
                 
             else: # parenthesis and curr_token is empty (i.e. the ( in '(atk>45)')
                 tokens.append(char)
-        
+
+        elif (char == "-" and not in_quotes):
+            if (curr_token): # parenthesis and curr_token is not empty (i.e. the ) in '(atk>45)')
+                tokens.append(curr_token)
+                tokens.append(char)
+                curr_token = ""
+                
+            else: # parenthesis and curr_token is empty (i.e. the ( in '(atk>45)')
+                tokens.append(char)
+
         else:
             curr_token += char
         
@@ -104,8 +113,9 @@ def classify_tokens(tokens: list) -> list:
             classified_tokens.append(("paren", token))
             continue
         
-        if (token[0] == "-"): negate_bool = True
-        else: negate_bool = False
+        if (token[0] == "-"): 
+            classified_tokens.append(("bool", token))
+            continue
         
         # Get the type of token comparison
         if ("<=" in token): comp_type = "<="
@@ -119,21 +129,17 @@ def classify_tokens(tokens: list) -> list:
         # Either a bool word or name
         if (len(split_token) == 1): # Could be a bool token, or a name
             if (token not in BOOL_WORDS): 
-                if (negate_bool): bool_type = "!="
-                else: bool_type = "=="
+                bool_type = "=="
                 classified_tokens.append(("name", token, bool_type)) # Name token
             else: 
-                if (negate_bool): token = NEGATED_BOOLS[token]
                 classified_tokens.append(("bool", token)) # Bool token
         
         # Some type of attribute to query
         elif (len(split_token) == 2): # Attribute token
             # Error checking
-            if (negate_bool and split_token[0][1:] not in TOKEN_WORDS): raise InvalidKeywordException(f"{split_token[0][1:]} not a valid keyword")
-            elif (not negate_bool and split_token[0] not in TOKEN_WORDS): raise InvalidKeywordException(f"{split_token[0]} not a valid keyword")
+            if (split_token[0] not in TOKEN_WORDS): raise InvalidKeywordException(f"{split_token[0]} not a valid keyword")
             
             token_type = split_token[0]
-            if (negate_bool): token_type = token_type[1:]
             token_value = strip(split_token[1])
 
             if (token_type in ["type", "t"]): token_type = "type"
@@ -150,7 +156,6 @@ def classify_tokens(tokens: list) -> list:
             elif (token_type in ["region"]): token_type = "region"
             
             if (comp_type == ":" or comp_type == "="): comp_type = "=="
-            if (negate_bool): comp_type = NEGATED_BOOLS[comp_type]
             token_tuple = (token_type, token_value, comp_type) # ex: ("hp", "50", "<=")
             
             classified_tokens.append(token_tuple)
@@ -257,7 +262,7 @@ def get_valid_pokemon(database: list[Pokemon], token: tuple[str, str, str]) -> l
 
 if __name__ == "__main__":
     #queries = ["((t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
-    queries = ["t:fire -t:ghost -or"]
+    queries = ["t:fire -t:ghost", "(-(t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire" ]
     for query in queries:
         try:
             raw_tokens = tokenize(query)
