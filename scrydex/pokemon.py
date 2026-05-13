@@ -34,6 +34,9 @@ class Pokemon:
             "base_total": self.base_total,
             "image": f"/images/{self.dex_number}.png"
     }
+
+    def __hash__(self) -> int:
+        return self.normalized_name.__hash__()
     
     
 def create_database_from_csv(filename: str = "pokemon.csv") -> list[Pokemon]:
