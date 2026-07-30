@@ -22,3 +22,11 @@ def get_pokemon_from_query(database: list[Pokemon], query: str) -> list[Pokemon]
 if __name__ == "__main__":
     pokemon_db = create_database_from_csv()
     valid = get_pokemon_from_query(pokemon_db, "hp>100 atk<20")
+    
+    normal = get_pokemon_from_query(pokemon_db, "t:normal")
+    ghost = get_pokemon_from_query(pokemon_db, "t:ghost")
+    
+    both = normal + ghost
+    both.sort(key = lambda x: x.name)
+    for p in both:
+        print(p)
