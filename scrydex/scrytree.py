@@ -25,17 +25,20 @@ class BinaryOperator(Expression):
         left_value = self.left.evaluate()
         right_value = self.right.evaluate()
         
-        if (self.op == "+"): return left_value + right_value
-        elif (self.op == "*"): return left_value * right_value
+        if (self.op == "and"): return left_value + right_value
+        elif (self.op == "or"): return left_value * right_value
         raise ValueError(f"Unsupported operator {self.op}")
     
 @dataclass
-class UnaryOperator(Expression):
+class Filter(Expression):
+    field: str
     op: str
     value: Expression
     
     def evaluate(self) -> Any:
-        if (self.op == "not"): return NotImplemented # fix later
+        # all_pokemon = 
+        
+        if (self.field == "type"): return NotImplemented # fix later
     
     
 if __name__ == "__main__":
