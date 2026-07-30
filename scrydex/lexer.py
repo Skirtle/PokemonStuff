@@ -186,7 +186,7 @@ def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
 if __name__ == "__main__":
     # raw query -> tokenize -> classify_tokens
     #queries = ["((t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
-    queries = ["type:fire hp>=100 or name:pikachu", "t:fire -mega", "t:fire -t:ghost", "(-(t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire" ]
+    queries = ["type:fire hp>=100 or name:pikachu", "t:fire -mega", "t:fire -t:ghost", "(-(t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
     for query in queries:
         print(f"{query = }")
         query_tokens = tokenize(query)
