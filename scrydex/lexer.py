@@ -1,5 +1,4 @@
 from pokemon import Pokemon
-from typing import Optional
 
 TOKEN_WORDS = ["t", "type", "n", "name", "gen", "game", "hp", "atk", "attack", "spatk", "specialattack", "defense", "def", "spdef", "specialdef", "speed", "spd", "bst", "total", "region"] # to be expanded on
 OPERATOR_WORDS = ["not", "and", "or"]

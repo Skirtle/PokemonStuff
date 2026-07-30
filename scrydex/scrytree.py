@@ -34,6 +34,9 @@ class UnaryOperator(Expression):
     op: str
     value: Expression
     
+    def evaluate(self) -> Any:
+        if (self.op == "not"): return NotImplemented # fix later
+    
     
 if __name__ == "__main__":
     tree = BinaryOperator(BinaryOperator(Literal(5), "+", Literal(7)), "*", BinaryOperator(Literal(2), "*", Literal(7)))

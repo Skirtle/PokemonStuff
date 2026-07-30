@@ -1,9 +1,9 @@
 import lexer
-
+import scrytree
 
     
 if __name__ == "__main__":
-    query = "-(t:fire atk>50) or (spd>100 -(t:ghost t:fire))"
+    query = "name:regi spd>100"
     tokens = lexer.tokenize(query)
     classified_tokens = lexer.classify_tokens(tokens)
     print(query)
