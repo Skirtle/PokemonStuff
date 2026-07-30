@@ -7,7 +7,7 @@ class InvalidKeywordException(Exception):
         super().__init__(self.message)
     def __str__(self): return self.message
 
-class EmptyQueryException(Exception):
+class InvalidQueryException(Exception):
     def __init__(self, message):
         self.message = message
         super().__init__(self.message)
@@ -153,7 +153,7 @@ def classify_tokens(tokens: list) -> list:
     return post_process_tokens(classified_tokens)
 
 def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
-    """Adds boolean tokens in between tokens where they belong and removes empty tokens
+    """Adds boolean tokens in between tokens where they belong, adds missing trailing ending parenthesis, and removes empty tokens
 
     Args:
         tokens (list[tuple]): a list of tokens
@@ -161,13 +161,17 @@ def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
     Returns:
         list[tuple]: a list of tokens
     """
-    if (len(tokens) == 0): raise EmptyQueryException(f"Query cannot be empty")
+    if (len(tokens) == 0): raise InvalidQueryException(f"Query cannot be empty")
 
     index = 1
     new_tokens = [tokens[0]]
+    open_groups = 0
     while (index < len(tokens)):
         previous_token = tokens[index - 1]
         current_token = tokens[index]
+        if (previous_token[1] == "("): open_groups += 1
+        elif (previous_token[1] and open_groups == 0): raise InvalidQueryException("Query contains unclosed parenthesis")
+        elif (previous_token[1] == ")"): open_groups -= 1
         
         # Previous token not bool/() and current is not bool/()
         # Adds implied AND, "args AND args"
@@ -186,14 +190,18 @@ def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
         
         new_tokens.append(current_token)
         index += 1
-
+    
+    # Adds the missing parenthesis
+    if (open_groups):
+        raise InvalidQueryException("Query contains unclosed parenthesis")
+    
     return new_tokens
 
 if __name__ == "__main__":
     # raw query -> tokenize -> classify_tokens
     #queries = ["((t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
     # queries = ["type:fire hp>=100 or name:pikachu", "t:fire -mega", "t:fire -t:ghost", "(-(t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
-    queries = ["(((t:fire or t:water) atk>=100"]
+    queries = ["(t:fire or t:water) atk>=100"]
     for query in queries:
         print(f"{query = }")
         query_tokens = tokenize(query)
