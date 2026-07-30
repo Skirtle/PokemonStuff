@@ -1,5 +1,3 @@
-from pokemon import Pokemon
-
 TOKEN_WORDS = ["t", "type", "n", "name", "gen", "game", "hp", "atk", "attack", "spatk", "specialattack", "defense", "def", "spdef", "specialdef", "speed", "spd", "bst", "total", "region"] # to be expanded on
 OPERATOR_WORDS = ["not", "and", "or"]
 
@@ -24,13 +22,10 @@ def strip(s: str) -> str:
     Returns:
         str: the stripped string
     """
-    if not s:
-        return ""
+    if not s: return ""
     s = s.strip()  # remove whitespace
-    if (s[0] in ("'", '"')):
-        s = s[1:]
-    if (s and s[-1] in ("'", '"')):  # check s again
-        s = s[:-1]
+    if (s[0] in ("'", '"')): s = s[1:]
+    if (s and s[-1] in ("'", '"')): s = s[:-1] # check s again
     return s
 
 def tokenize(query: str) -> list:
@@ -115,7 +110,9 @@ def classify_tokens(tokens: list) -> list:
         elif ("<" in token): comp_type = "<"
         elif (">=" in token): comp_type = ">="
         elif (">" in token): comp_type = ">"
-        elif ("=" in token): comp_type = "="
+        elif ("==" in token): comp_type = "=="
+        elif ("!=" in token): comp_type = "!="
+        elif ("=" in token): comp_type = ":"
         else: comp_type = ":"
         split_token = token.split(comp_type, 1)
         
@@ -148,7 +145,7 @@ def classify_tokens(tokens: list) -> list:
             elif (token_type in ["bst", "total"]): token_type = "bst"
             elif (token_type in ["region"]): token_type = "region"
             
-            if (comp_type == ":" or comp_type == "="): comp_type = "=="
+            if (comp_type == ":" or comp_type == "="): comp_type = ":"
             token_tuple = (token_type, token_value, comp_type) # ex: ("hp", "50", "<=")
             
             classified_tokens.append(token_tuple)
@@ -169,16 +166,25 @@ def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
     index = 1
     new_tokens = [tokens[0]]
     while (index < len(tokens)):
-        if (tokens[index - 1][0] not in ["bool", "paren"] and tokens[index][0] not in ["bool", "paren"]):
+        previous_token = tokens[index - 1]
+        current_token = tokens[index]
+        
+        # Previous token not bool/() and current is not bool/()
+        # Adds implied AND, "args AND args"
+        if (previous_token[0] not in ["bool", "paren"] and current_token[0] not in ["bool", "paren"]):
             new_tokens.append(("bool", "and"))
 
-        elif (tokens[index - 1][0] not in ["bool", "paren"] and tokens[index][1] == "not"):
-            new_tokens.append(("bool", "and"))
-            
-        elif (tokens[index - 1][1] == ")" and tokens[index][1] != ")" and tokens[index][0] != "bool"):
+        # Previous token not bool/() and current is not negation
+        # Adds implied AND, "args AND NOT args"
+        elif (previous_token[0] not in ["bool", "paren"] and current_token[1] == "not"):
             new_tokens.append(("bool", "and"))
         
-        new_tokens.append(tokens[index])
+        # Prevuious token is ) and current is not )/bool
+        # Adds implied AND, "(args) AND args"
+        elif (previous_token[1] == ")" and current_token[1] != ")" and current_token[0] != "bool"):
+            new_tokens.append(("bool", "and"))
+        
+        new_tokens.append(current_token)
         index += 1
 
     return new_tokens
@@ -186,13 +192,16 @@ def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
 if __name__ == "__main__":
     # raw query -> tokenize -> classify_tokens
     #queries = ["((t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
-    queries = ["type:fire hp>=100 or name:pikachu", "t:fire -mega", "t:fire -t:ghost", "(-(t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
+    # queries = ["type:fire hp>=100 or name:pikachu", "t:fire -mega", "t:fire -t:ghost", "(-(t:ghost -spd>80) or (spatk<=45 atk<=45)) -t:fire"]
+    queries = ["(((t:fire or t:water) atk>=100"]
     for query in queries:
         print(f"{query = }")
         query_tokens = tokenize(query)
         print(f"{query_tokens = }")
         query_classified_tokens = classify_tokens(query_tokens)
-        print(f"{query_classified_tokens = }")
+        print(f"query_classified_tokens")
+        for token in query_classified_tokens:
+            print(f"\t{token}")
         
         
         
