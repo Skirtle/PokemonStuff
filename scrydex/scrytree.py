@@ -2,6 +2,10 @@ from dataclasses import dataclass
 from typing import Any
 from abc import ABC, abstractmethod
 from pokemon import Pokemon
+from lexer import TOKEN_WORDS, OPERATOR_WORDS
+
+BINARY_EXPRESSIONS = OPERATOR_WORDS
+FILTER_EXPRESSIONS = TOKEN_WORDS
 
 @dataclass
 class Expression(ABC):
@@ -44,6 +48,8 @@ class Filter(Expression):
                 return [p for p in all_pokemon if self.value in p.types]
             else:
                 return [p for p in all_pokemon if self.value not in p.types]
+            
+        return NotImplemented
     
     
 if __name__ == "__main__":

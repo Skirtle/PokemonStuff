@@ -28,7 +28,7 @@ def strip(s: str) -> str:
     if (s and s[-1] in ("'", '"')): s = s[:-1] # check s again
     return s
 
-def tokenize(query: str) -> list:
+def tokenize(query: str) -> list[tuple]:
     """turns a search query into individual tokens in a list
 
     Args:
@@ -170,7 +170,7 @@ def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
         previous_token = tokens[index - 1]
         current_token = tokens[index]
         if (previous_token[1] == "("): open_groups += 1
-        elif (previous_token[1] and open_groups == 0): raise InvalidQueryException("Query contains unclosed parenthesis")
+        elif (previous_token[1] == ")" and open_groups == 0): raise InvalidQueryException("Query contains unclosed parenthesis")
         elif (previous_token[1] == ")"): open_groups -= 1
         
         # Previous token not bool/() and current is not bool/()
@@ -191,7 +191,8 @@ def post_process_tokens(tokens: list[tuple]) -> list[tuple]:
         new_tokens.append(current_token)
         index += 1
     
-    # Adds the missing parenthesis
+    # Checks for missing parenthesis
+    if (tokens[index - 1][1] == ")"): open_groups -= 1 # Above loop does not check the last index for parenthesis
     if (open_groups):
         raise InvalidQueryException("Query contains unclosed parenthesis")
     
