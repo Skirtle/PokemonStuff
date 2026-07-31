@@ -1,6 +1,14 @@
 from dataclasses import dataclass, field
 from csv import reader as csvreader
+from enum import Enum
 
+class STAT_INDEX(Enum):
+    HP = 0
+    ATTACK = 1
+    DEFENSE = 2
+    SPECIAL_ATTACK = 3
+    SPECIAL_DEFENSE = 4
+    SPEED = 5
 
 @dataclass
 class Pokemon:
