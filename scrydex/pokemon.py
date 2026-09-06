@@ -57,7 +57,7 @@ def create_database_from_csv(filename: str = "pokemon.csv") -> list[Pokemon]:
         list[Pokemon]: a list of Pokemon
     """
     pokemon_database = []
-    with open(f"pokemon.csv", "r") as file:
+    with open(f"pokemon.csv", "r", encoding = "utf-8") as file:
         reader = csvreader(file)
         for pokemon in reader:
             if (pokemon[0] == "number"): continue
