@@ -9,7 +9,7 @@ app = FastAPI()
 ALL_POKEMON = create_database_from_csv()
 MAX_RESULTS = 100
 
-app.mount("/images", StaticFiles(directory = "./sprites-master/sprites/pokemon/other/official-artwork"), name = "images")
+app.mount("/images", StaticFiles(directory = "./pokedex"), name = "images")
 
 @app.get("/search")
 async def search(query: str = ""):
