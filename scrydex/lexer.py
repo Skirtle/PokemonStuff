@@ -119,7 +119,7 @@ def classify_tokens(tokens: list) -> list:
         # Either a bool word or name
         if (len(split_token) == 1): # Could be a bool token, or a name
             if (token not in OPERATOR_WORDS): 
-                bool_type = "=="
+                bool_type = "="
                 classified_tokens.append(("name", token, bool_type)) # Name token
             else: 
                 classified_tokens.append(("bool", token)) # Bool token
