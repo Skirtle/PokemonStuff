@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from engine import get_pokemon_from_query
 from pokemon import create_database_from_csv
 
+
 app = FastAPI()
 ALL_POKEMON = create_database_from_csv()
 MAX_RESULTS = 100

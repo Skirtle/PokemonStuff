@@ -55,17 +55,15 @@
         <input id="search" placeholder="type:ghost speed>100" />
         <div id="count"></div>
         <div class="grid" id="results"></div>
-
         <script>
             const input = document.getElementById("search");
             const results = document.getElementById("results");
             const count = document.getElementById("count");
 
-            let timeout;
-
-            input.addEventListener("input", () => {
-                clearTimeout(timeout);
-                timeout = setTimeout(runSearch, 200);
+            input.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    runSearch();
+                }
             });
 
             async function runSearch() {

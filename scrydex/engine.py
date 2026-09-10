@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pokemon import Pokemon, create_database_from_csv
+from parser import create_tree
 import lexer
 
 def get_pokemon_from_query(database: list[Pokemon], query: str) -> list[Pokemon]:
@@ -7,14 +8,7 @@ def get_pokemon_from_query(database: list[Pokemon], query: str) -> list[Pokemon]
     tokens = lexer.tokenize(query)
     classified_tokens = lexer.classify_tokens(tokens)
     
-    for token in classified_tokens:
-        if (token[0] == "bool"):
-            continue
-        elif (token[0] == "paren"):
-            continue
-        valid_pokemon = lexer.get_valid_pokemon(valid_pokemon, token)
-        if (len(valid_pokemon) == 0): break
-    
+    valid_pokemon = create_tree(classified_tokens).evaluate()
     
     return valid_pokemon
 
