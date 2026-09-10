@@ -112,7 +112,7 @@ def classify_tokens(tokens: list) -> list:
         elif (">" in token): comp_type = ">"
         elif ("==" in token): comp_type = "=="
         elif ("!=" in token): comp_type = "!="
-        elif ("=" in token): comp_type = ":"
+        elif ("=" in token): comp_type = "="
         else: comp_type = ":"
         split_token = token.split(comp_type, 1)
         
