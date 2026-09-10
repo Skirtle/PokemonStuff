@@ -53,11 +53,11 @@ class Filter(Expression):
             
         if (self.field == "name"): 
             if (self.op == "!="):
-                return [p for p in all_pokemon if self.value.evaluate() not in p.normalized_name]
+                return [p for p in all_pokemon if self.value.evaluate().lower() not in p.name.lower()]
             elif (self.op == "=" or self.op == ":"):
-                return [p for p in all_pokemon if self.value.evaluate() in p.normalized_name]
+                return [p for p in all_pokemon if self.value.evaluate().lower() in p.name.lower()]
             elif (self.op == "=="):
-                return [p for p in all_pokemon if self.value.evaluate() == p.normalized_name]
+                return [p for p in all_pokemon if self.value.evaluate().lower() == p.name.lower()]
             
         elif (self.field == "hp"): 
             if (self.op == "!="):
@@ -142,7 +142,8 @@ class Filter(Expression):
                 return [p for p in all_pokemon if p.stats[STAT_INDEX.SPEED.value] <= int(self.value.evaluate())]
             elif (self.op == "<"):
                 return [p for p in all_pokemon if p.stats[STAT_INDEX.SPEED.value] < int(self.value.evaluate())]
-            
+        
+        
         raise NotImplementedError(f"Error on {self}, likely have yet to implement logic for {self.field}")
     
     
