@@ -60,7 +60,6 @@ class Filter(Expression):
             elif (self.op == "=="):
                 return [p for p in all_pokemon if self.value.evaluate().lower() == p.name.lower()]
             
-        
         # Compare numerical stats
         stat_fields = {
             "hp": STAT_INDEX.HP.value,
@@ -70,20 +69,23 @@ class Filter(Expression):
             "spdef": STAT_INDEX.SPECIAL_DEFENSE.value,
             "spd": STAT_INDEX.SPEED.value
         }
-        pokemon_stat_index = stat_fields[self.field]
+        if (self.field in ["hp", "atk", "spatk", "def", "spdef", "spd"]):
+            pokemon_stat_index = stat_fields[self.field]
+            
+            operators = {
+                "!=": operator.ne,
+                ":": operator.eq,
+                ">": operator.gt,
+                ">=": operator.ge,
+                "<=": operator.le,
+                "<": operator.lt,
+            }
+            compare = operators[self.op]
+            
+            value = self.value.evaluate()
+            return [p for p in all_pokemon if compare(p.stats[pokemon_stat_index], value)]
         
-        operators = {
-            "!=": operator.ne,
-            ":": operator.eq,
-            ">": operator.gt,
-            ">=": operator.ge,
-            "<=": operator.le,
-            "<": operator.lt,
-        }
-        compare = operators[self.op]
-        
-        value = self.value.evaluate()
-        return [p for p in all_pokemon if compare(p.stats[pokemon_stat_index], value)]
+        raise NotImplementedError(f"Error on {self}")
     
     
 if __name__ == "__main__":
