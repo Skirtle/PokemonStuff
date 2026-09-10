@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from pokemon import Pokemon, STAT_INDEX, create_database_from_csv
 from lexer import TOKEN_WORDS, OPERATOR_WORDS
+import operator
 
 BINARY_EXPRESSIONS = OPERATOR_WORDS
 FILTER_EXPRESSIONS = TOKEN_WORDS
@@ -59,92 +60,30 @@ class Filter(Expression):
             elif (self.op == "=="):
                 return [p for p in all_pokemon if self.value.evaluate().lower() == p.name.lower()]
             
-        elif (self.field == "hp"): 
-            if (self.op == "!="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.HP.value] != int(self.value.evaluate())]
-            elif (self.op == ":"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.HP.value] == int(self.value.evaluate())]
-            elif (self.op == ">"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.HP.value] > int(self.value.evaluate())]
-            elif (self.op == ">="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.HP.value] >= int(self.value.evaluate())]
-            elif (self.op == "<="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.HP.value] <= int(self.value.evaluate())]
-            elif (self.op == "<"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.HP.value] < int(self.value.evaluate())]
-            
-        elif (self.field == "atk"): 
-            if (self.op == "!="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.ATTACK.value] != int(self.value.evaluate())]
-            elif (self.op == ":"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.ATTACK.value] == int(self.value.evaluate())]
-            elif (self.op == ">"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.ATTACK.value] > int(self.value.evaluate())]
-            elif (self.op == ">="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.ATTACK.value] >= int(self.value.evaluate())]
-            elif (self.op == "<="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.ATTACK.value] <= int(self.value.evaluate())]
-            elif (self.op == "<"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.ATTACK.value] < int(self.value.evaluate())]
         
-        elif (self.field == "spatk"): 
-            if (self.op == "!="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_ATTACK.value] != int(self.value.evaluate())]
-            elif (self.op == ":"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_ATTACK.value] == int(self.value.evaluate())]
-            elif (self.op == ">"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_ATTACK.value] > int(self.value.evaluate())]
-            elif (self.op == ">="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_ATTACK.value] >= int(self.value.evaluate())]
-            elif (self.op == "<="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_ATTACK.value] <= int(self.value.evaluate())]
-            elif (self.op == "<"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_ATTACK.value] < int(self.value.evaluate())]
-            
-        elif (self.field == "def"): 
-            if (self.op == "!="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.DEFENSE.value] != int(self.value.evaluate())]
-            elif (self.op == ":"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.DEFENSE.value] == int(self.value.evaluate())]
-            elif (self.op == ">"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.DEFENSE.value] > int(self.value.evaluate())]
-            elif (self.op == ">="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.DEFENSE.value] >= int(self.value.evaluate())]
-            elif (self.op == "<="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.DEFENSE.value] <= int(self.value.evaluate())]
-            elif (self.op == "<"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.DEFENSE.value] < int(self.value.evaluate())]
+        # Compare numerical stats
+        stat_fields = {
+            "hp": STAT_INDEX.HP.value,
+            "atk": STAT_INDEX.ATTACK.value,
+            "spatk": STAT_INDEX.SPECIAL_ATTACK.value,
+            "def": STAT_INDEX.DEFENSE.value,
+            "spdef": STAT_INDEX.SPECIAL_DEFENSE.value,
+            "spd": STAT_INDEX.SPEED.value
+        }
+        pokemon_stat_index = stat_fields[self.field]
         
-        elif (self.field == "spdef"): 
-            if (self.op == "!="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_DEFENSE.value] != int(self.value.evaluate())]
-            elif (self.op == ":"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_DEFENSE.value] == int(self.value.evaluate())]
-            elif (self.op == ">"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_DEFENSE.value] > int(self.value.evaluate())]
-            elif (self.op == ">="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_DEFENSE.value] >= int(self.value.evaluate())]
-            elif (self.op == "<="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_DEFENSE.value] <= int(self.value.evaluate())]
-            elif (self.op == "<"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPECIAL_DEFENSE.value] < int(self.value.evaluate())]
+        operators = {
+            "!=": operator.ne,
+            ":": operator.eq,
+            ">": operator.gt,
+            ">=": operator.ge,
+            "<=": operator.le,
+            "<": operator.lt,
+        }
+        compare = operators[self.op]
         
-        elif (self.field == "spd"): 
-            if (self.op == "!="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPEED.value] != int(self.value.evaluate())]
-            elif (self.op == ":"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPEED.value] == int(self.value.evaluate())]
-            elif (self.op == ">"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPEED.value] > int(self.value.evaluate())]
-            elif (self.op == ">="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPEED.value] >= int(self.value.evaluate())]
-            elif (self.op == "<="):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPEED.value] <= int(self.value.evaluate())]
-            elif (self.op == "<"):
-                return [p for p in all_pokemon if p.stats[STAT_INDEX.SPEED.value] < int(self.value.evaluate())]
-        
-        
-        raise NotImplementedError(f"Error on {self}, likely have yet to implement logic for {self.field}")
+        value = self.value.evaluate()
+        return [p for p in all_pokemon if compare(p.stats[pokemon_stat_index], value)]
     
     
 if __name__ == "__main__":
