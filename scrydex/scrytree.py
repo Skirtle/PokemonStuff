@@ -82,16 +82,11 @@ class Filter(Expression):
             }
             compare = operators[self.op]
             
-            value = self.value.evaluate()
+            value = int(self.value.evaluate())
             return [p for p in all_pokemon if compare(p.stats[pokemon_stat_index], value)]
         
         raise NotImplementedError(f"Error on {self}")
     
     
 if __name__ == "__main__":
-    import parser
-    import lexer
-    query = "t:fire spd>100"
-    tokens = lexer.classify_tokens(lexer.tokenize(query)) # [('type', 'fire', ':'), ('bool', 'and'), ('spd', '100', '>')]
-    tree = BinaryOperator(Filter("type", "==", Literal("fire")), "and", Filter("spd", ">=", Literal(100)))
-    print(tree.evaluate())
+    ...
